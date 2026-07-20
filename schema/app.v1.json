@@ -4,34 +4,74 @@
   "title": "Cortex App Manifest v1",
   "type": "object",
   "additionalProperties": false,
-  "required": ["id", "name", "version", "type", "description", "publisher", "icon", "cortex"],
+  "required": [
+    "id",
+    "name",
+    "version",
+    "type",
+    "description",
+    "publisher",
+    "icon",
+    "cortex"
+  ],
   "properties": {
-    "$schema": { "type": "string" },
+    "$schema": {
+      "type": "string"
+    },
     "id": {
       "type": "string",
       "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
       "maxLength": 64,
       "description": "Kebab-case slug, globally unique in the registry"
     },
-    "name": { "type": "string", "minLength": 1, "maxLength": 80 },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+    },
     "version": {
       "type": "string",
       "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(-[0-9A-Za-z.-]+)?$",
       "description": "Semver"
     },
-    "type": { "enum": ["static", "platform", "service"] },
-    "description": { "type": "string", "minLength": 1, "maxLength": 200 },
+    "type": {
+      "enum": [
+        "static",
+        "platform",
+        "service"
+      ]
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
     "publisher": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["name"],
+      "required": [
+        "name"
+      ],
       "properties": {
-        "name": { "type": "string", "minLength": 1, "maxLength": 80 },
-        "url": { "type": "string", "format": "uri" },
-        "email": { "type": "string", "format": "email" }
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "email": {
+          "type": "string",
+          "format": "email"
+        }
       }
     },
-    "icon": { "type": "string", "description": "Path to an SVG icon inside the package" },
+    "icon": {
+      "type": "string",
+      "description": "Path to an SVG icon inside the package"
+    },
     "entry": {
       "type": "string",
       "default": "index.html",
@@ -40,20 +80,46 @@
     "cortex": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["minVersion", "keyScope", "endpoints", "collections"],
+      "required": [
+        "minVersion",
+        "keyScope",
+        "endpoints",
+        "collections"
+      ],
       "properties": {
-        "minVersion": { "type": "string" },
-        "keyScope": { "enum": ["read", "read_write"] },
+        "minVersion": {
+          "type": "string"
+        },
+        "keyScope": {
+          "enum": [
+            "read",
+            "read_write"
+          ]
+        },
         "endpoints": {
           "type": "array",
           "minItems": 1,
-          "items": { "type": "string", "pattern": "^[a-z0-9_-]+(/[a-z0-9_{}-]+)*$" },
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9_-]+(/[a-z0-9_{}-]+)*$"
+          },
           "description": "Cortex API paths (relative to /api/) the proxy will allow"
         },
         "collections": {
           "oneOf": [
-            { "enum": ["user-selected", "all"] },
-            { "type": "array", "items": { "type": "string" }, "minItems": 1 }
+            {
+              "enum": [
+                "user-selected",
+                "all"
+              ]
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            }
           ]
         }
       }
@@ -63,19 +129,47 @@
       "additionalProperties": false,
       "description": "Platform apps only. Each declared capability is shown to the admin at install.",
       "properties": {
-        "tasks": { "type": "object", "additionalProperties": false, "properties": {} },
-        "storage": { "type": "object", "additionalProperties": false, "properties": {} },
+        "tasks": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {}
+        },
+        "storage": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {}
+        },
         "http": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["hosts"],
+          "required": [
+            "hosts"
+          ],
           "properties": {
-            "hosts": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+            "hosts": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              }
+            }
           }
         },
-        "llm": { "type": "object", "additionalProperties": false, "properties": {} },
-        "features": { "type": "object", "additionalProperties": false, "properties": {} },
-        "branding": { "type": "object", "additionalProperties": false, "properties": {} }
+        "llm": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {}
+        },
+        "features": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {}
+        },
+        "branding": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {}
+        }
       }
     },
     "config": {
@@ -83,29 +177,56 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["name", "type"],
+        "required": [
+          "name",
+          "type"
+        ],
         "properties": {
-          "name": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" },
-          "description": { "type": "string", "maxLength": 200 },
-          "type": { "enum": ["text", "secret"] },
-          "required": { "type": "boolean", "default": false },
+          "name": {
+            "type": "string",
+            "pattern": "^[A-Z][A-Z0-9_]*$"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "type": {
+            "enum": [
+              "text",
+              "secret"
+            ]
+          },
+          "required": {
+            "type": "boolean",
+            "default": false
+          },
           "auth_header": {
             "type": "string",
             "description": "Header template for server-side injection, e.g. 'Authorization: Token PAPERLESS_TOKEN'"
+          },
+          "auth_host": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Restrict this var's auth_header to one host (literal hostname/URL or ${CONFIG_VAR} reference). Without it the header is injected on EVERY platform http call \u2014 declare it whenever the app talks to more than one host."
           }
         }
       }
     },
     "externalHosts": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "Hosts the browser may call directly (CSP connect-src). ${VAR} references to config values allowed."
     },
     "sharing": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "links": { "type": "boolean", "default": false }
+        "links": {
+          "type": "boolean",
+          "default": false
+        }
       }
     },
     "users": {
@@ -117,11 +238,23 @@
       "type": "object",
       "additionalProperties": false,
       "description": "Service apps only",
-      "required": ["image"],
+      "required": [
+        "image"
+      ],
       "properties": {
-        "image": { "type": "string" },
-        "compose": { "type": "string" },
-        "requiredKeyScope": { "enum": ["read", "read_write", "delegated-provisioning"] }
+        "image": {
+          "type": "string"
+        },
+        "compose": {
+          "type": "string"
+        },
+        "requiredKeyScope": {
+          "enum": [
+            "read",
+            "read_write",
+            "delegated-provisioning"
+          ]
+        }
       }
     },
     "appContext": {
@@ -136,13 +269,46 @@
   },
   "allOf": [
     {
-      "if": { "properties": { "type": { "const": "service" } } },
-      "then": { "required": ["service"] },
-      "else": { "required": ["entry"], "not": { "required": ["service"] } }
+      "if": {
+        "properties": {
+          "type": {
+            "const": "service"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "service"
+        ]
+      },
+      "else": {
+        "required": [
+          "entry"
+        ],
+        "not": {
+          "required": [
+            "service"
+          ]
+        }
+      }
     },
     {
-      "if": { "properties": { "type": { "not": { "const": "platform" } } } },
-      "then": { "not": { "required": ["capabilities"] } }
+      "if": {
+        "properties": {
+          "type": {
+            "not": {
+              "const": "platform"
+            }
+          }
+        }
+      },
+      "then": {
+        "not": {
+          "required": [
+            "capabilities"
+          ]
+        }
+      }
     }
   ]
 }

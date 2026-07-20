@@ -106,6 +106,19 @@ if (manifest) {
     if (!["text", "secret"].includes(v.type)) {
       issues.push(`app.json: config var ${v.name}: "type" must be text | secret`);
     }
+    if (v.auth_host !== undefined && (typeof v.auth_host !== "string" || !v.auth_host.trim())) {
+      issues.push(`app.json: config var ${v.name}: "auth_host" must be a hostname or \${CONFIG_VAR} reference`);
+    }
+  }
+  // Multi-host apps: every auth_header var should be host-scoped, or one
+  // service's credential is sent to every declared host.
+  const declaredHosts = manifest.capabilities?.http?.hosts ?? [];
+  if (declaredHosts.length > 1) {
+    for (const v of manifest.config ?? []) {
+      if (v.auth_header && !v.auth_host) {
+        warn.push(`config var ${v.name} has auth_header but no auth_host — with ${declaredHosts.length} declared hosts its credential is injected on calls to ALL of them`);
+      }
+    }
   }
 }
 

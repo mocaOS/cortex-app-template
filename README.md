@@ -44,6 +44,7 @@ so any instance can install it.
 |---|---|
 | `app.json` | Your app's manifest — id, endpoints, scope, config vars ([schema](schema/app.v1.json)) |
 | `src/lib/cortex.ts` | Typed client: `search()`, `askStream()` (SSE), `cortex()`, `platform()` |
+| `src/lib/platform.ts` | Tasks + storage client: `submitTask()`, `taskAction()`, `storageGet/Put()`, … |
 | `src/components/` | Demo panels exercising search + streaming Q&A with citations |
 | `src/styles/index.css` | Cortex design tokens (dark-first, sharp corners, mono labels) |
 | `scripts/validate.mjs` | Contract checks — run before every upload |
@@ -70,14 +71,23 @@ so any instance can install it.
 ```
 
 `type: "platform"` unlocks server-side capabilities declared under
-`capabilities`. Shipped today: `http` — external API calls executed by the
-instance with secrets injected from app config, so the target needs **no
-CORS setup** and credentials never reach the browser (prefer this over
-browser-direct `externalHosts` for any authenticated service) — plus an
-implicit config-read endpoint (`./api/platform/config`, non-secret values
-only). Specced next: background task queue, storage, LLM calls. See the
-builder skill for the full guide. `type: "service"` is for apps that need
-their own container; those ship compose templates instead of zips.
+`capabilities`. Shipped today:
+
+- `http` — external API calls executed by the instance with secrets injected
+  from app config, so the target needs **no CORS setup** and credentials
+  never reach the browser (prefer this over browser-direct `externalHosts`
+  for any authenticated service).
+- `tasks` — declarative step-queues (`http`/`cortex`/`llm`/`store`/`template`
+  steps) that Cortex runs server-side: work survives a closed tab, and a
+  `schedule` makes it recur with no browser at all. Client in
+  [`src/lib/platform.ts`](src/lib/platform.ts); DSL reference:
+  `cortexskills.org/builder/app/tasks.md`.
+- `storage` — the app's private, quota-capped key/value store.
+- `llm` — completions via the instance's model inside task steps (metered).
+- Implicit config-read (`./api/platform/config`, non-secret values only).
+
+See the builder skill for the full guide. `type: "service"` is for apps that
+need their own container; those ship compose templates instead of zips.
 
 ## Design language
 

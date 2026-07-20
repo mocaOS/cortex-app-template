@@ -5,11 +5,11 @@ import { askStream, type SearchResult } from "../lib/cortex";
 function AnswerText({ text }: { text: string }) {
   const parts = text.split(/(\[src_\d+\])/g);
   return (
-    <p className="whitespace-pre-wrap text-sm leading-relaxed text-[--color-fg]/90">
+    <p className="whitespace-pre-wrap text-sm leading-relaxed text-[var(--color-fg)]/90">
       {parts.map((part, i) => {
         const m = part.match(/^\[src_(\d+)\]$/);
         return m ? (
-          <sup key={i} className="mx-0.5 font-mono text-[10px] font-semibold text-[--color-accent]">
+          <sup key={i} className="mx-0.5 font-mono text-[10px] font-semibold text-[var(--color-accent)]">
             [{m[1]}]
           </sup>
         ) : (
@@ -54,7 +54,7 @@ export default function AskPanel() {
 
   return (
     <div>
-      <h2 className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-[--color-muted]">
+      <h2 className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-muted)]">
         Ask AI
       </h2>
 
@@ -63,39 +63,39 @@ export default function AskPanel() {
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
           placeholder="Ask your knowledge base…"
-          className="w-full border border-[--color-line] bg-transparent px-4 py-3 text-sm outline-none placeholder:text-[--color-faint] focus:border-[--color-accent]"
+          className="w-full border border-[var(--color-line)] bg-transparent px-4 py-3 text-sm outline-none placeholder:text-[var(--color-faint)] focus:border-[var(--color-accent)]"
         />
         <button
           type="submit"
           disabled={stage !== null}
-          className="border border-[--color-line] px-5 font-mono text-xs font-semibold uppercase tracking-[0.1em] transition-colors hover:border-[--color-accent] hover:text-[--color-accent] disabled:opacity-40"
+          className="border border-[var(--color-line)] px-5 font-mono text-xs font-semibold uppercase tracking-[0.1em] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] disabled:opacity-40"
         >
           {stage !== null ? "…" : "Ask"}
         </button>
       </form>
 
       {stage && (
-        <p className="mt-4 font-mono text-xs uppercase tracking-[0.1em] text-[--color-faint]">
+        <p className="mt-4 font-mono text-xs uppercase tracking-[0.1em] text-[var(--color-faint)]">
           {stage}…
         </p>
       )}
       {error && <p className="mt-4 font-mono text-xs text-red-400">{error}</p>}
 
       {answer && (
-        <div className="mt-6 border border-[--color-line] bg-[--color-card] p-4">
+        <div className="mt-6 border border-[var(--color-line)] bg-[var(--color-card)] p-4">
           <AnswerText text={answer} />
         </div>
       )}
 
       {sources.length > 0 && (
         <div className="mt-4">
-          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[--color-faint]">
+          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-faint)]">
             Sources
           </p>
           <ul className="mt-2 space-y-1">
             {sources.map((s) => (
-              <li key={s.chunk_id} className="truncate font-mono text-xs text-[--color-muted]">
-                <span className="text-[--color-accent]">[{s.sid ?? "•"}]</span>{" "}
+              <li key={s.chunk_id} className="truncate font-mono text-xs text-[var(--color-muted)]">
+                <span className="text-[var(--color-accent)]">[{s.sid ?? "•"}]</span>{" "}
                 {s.metadata.filename ?? s.document_id}
               </li>
             ))}

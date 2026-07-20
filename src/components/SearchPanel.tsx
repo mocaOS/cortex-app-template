@@ -24,7 +24,7 @@ export default function SearchPanel() {
 
   return (
     <div>
-      <h2 className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-[--color-muted]">
+      <h2 className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-muted)]">
         Hybrid Search
       </h2>
 
@@ -33,12 +33,12 @@ export default function SearchPanel() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search your knowledge base…"
-          className="w-full border border-[--color-line] bg-transparent px-4 py-3 text-sm outline-none placeholder:text-[--color-faint] focus:border-[--color-accent]"
+          className="w-full border border-[var(--color-line)] bg-transparent px-4 py-3 text-sm outline-none placeholder:text-[var(--color-faint)] focus:border-[var(--color-accent)]"
         />
         <button
           type="submit"
           disabled={busy}
-          className="border border-[--color-line] px-5 font-mono text-xs font-semibold uppercase tracking-[0.1em] transition-colors hover:border-[--color-accent] hover:text-[--color-accent] disabled:opacity-40"
+          className="border border-[var(--color-line)] px-5 font-mono text-xs font-semibold uppercase tracking-[0.1em] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] disabled:opacity-40"
         >
           {busy ? "…" : "Go"}
         </button>
@@ -48,16 +48,16 @@ export default function SearchPanel() {
 
       <ul className="mt-6 space-y-px">
         {results.map((r) => (
-          <li key={r.chunk_id} className="border border-[--color-line] bg-[--color-card] p-4">
+          <li key={r.chunk_id} className="border border-[var(--color-line)] bg-[var(--color-card)] p-4">
             <div className="flex items-baseline justify-between gap-4">
-              <span className="truncate font-mono text-xs text-[--color-muted]">
+              <span className="truncate font-mono text-xs text-[var(--color-muted)]">
                 {r.metadata.filename ?? r.document_id}
               </span>
-              <span className="font-mono text-xs text-[--color-accent]">
+              <span className="font-mono text-xs text-[var(--color-accent)]">
                 {r.score.toFixed(3)}
               </span>
             </div>
-            <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-[--color-fg]/90">
+            <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-[var(--color-fg)]/90">
               {r.content}
             </p>
           </li>
