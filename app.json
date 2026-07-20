@@ -1,0 +1,23 @@
+{
+  "$schema": "./schema/app.v1.json",
+  "id": "my-cortex-app",
+  "name": "My Cortex App",
+  "version": "0.1.0",
+  "type": "static",
+  "description": "Describe what your app does in one line (shown in launcher and registry)",
+  "publisher": {
+    "name": "your-name",
+    "url": "https://github.com/your-name"
+  },
+  "icon": "icon.svg",
+  "entry": "index.html",
+  "cortex": {
+    "minVersion": "2.0.0",
+    "keyScope": "read",
+    "endpoints": ["search", "ask"],
+    "collections": "user-selected"
+  },
+  "externalHosts": [],
+  "sharing": { "links": true },
+  "users": false
+}
