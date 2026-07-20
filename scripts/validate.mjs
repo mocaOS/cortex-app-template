@@ -91,6 +91,14 @@ if (manifest) {
       issues.push(`app.json: "capabilities.http.hosts" must list every external host the server may call`);
     }
   }
+  // Twin of the server-side rule: tasks/storage/llm take no configuration
+  // in v1 — declaring stray fields fails install, so catch it here first.
+  for (const cap of ["tasks", "storage", "llm"]) {
+    const spec = manifest.capabilities?.[cap];
+    if (spec !== undefined && (typeof spec !== "object" || spec === null || Object.keys(spec).length > 0)) {
+      issues.push(`app.json: capability "${cap}" takes no configuration (use {})`);
+    }
+  }
   for (const v of manifest.config ?? []) {
     if (!/^[A-Z][A-Z0-9_]*$/.test(v.name ?? "")) {
       issues.push(`app.json: config var ${JSON.stringify(v.name)} must be UPPER_SNAKE`);
