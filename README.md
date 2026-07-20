@@ -21,6 +21,22 @@ Upload the zip in your Cortex admin panel (**Apps → Install**) for a private
 app, or publish it to [cortex-registry](https://github.com/mocaOS/cortex-registry)
 so any instance can install it.
 
+## Releasing (for registry publication)
+
+From a clean, pushed tree — the registry pins artifacts by checksum, so the
+zip must be reproducible from the tagged source:
+
+```bash
+npm run package                     # build + validate → {id}-{version}.zip
+sha256sum {id}-{version}.zip        # digest for release notes + listing
+gh release create v{version} {id}-{version}.zip --title "…" --notes "…sha256…"
+curl -sL <release asset url> | sha256sum   # verify published == built
+```
+
+Then PR `apps/{id}/listing.json` to the registry (manifest verbatim +
+artifact `{url, sha256, size}`). CI re-verifies the checksum. New version =
+new tag + new zip + listing bump — never swap the asset under an existing tag.
+
 ## The contract (read this before coding)
 
 1. **All requests are relative.** Hosted apps are served under `/apps/{slug}/`.
