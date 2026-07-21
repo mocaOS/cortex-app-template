@@ -23,19 +23,26 @@ so any instance can install it.
 
 ## Releasing (for registry publication)
 
-From a clean, pushed tree — the registry pins artifacts by checksum, so the
-zip must be reproducible from the tagged source:
+The shipped workflow ([.github/workflows/release.yml](.github/workflows/release.yml))
+does the whole thing on a tag push:
 
 ```bash
-npm run package                     # build + validate → {id}-{version}.zip
-sha256sum {id}-{version}.zip        # digest for release notes + listing
-gh release create v{version} {id}-{version}.zip --title "…" --notes "…sha256…"
-curl -sL <release asset url> | sha256sum   # verify published == built
+git tag v1.0.0 && git push --tags
+# CI builds from the tagged source, validates, packages, publishes the
+# GitHub release with the zip attached and its sha256 in the notes
 ```
 
-Then PR `apps/{id}/listing.json` to the registry (manifest verbatim +
-artifact `{url, sha256, size}`). CI re-verifies the checksum. New version =
-new tag + new zip + listing bump — never swap the asset under an existing tag.
+Then, in a cortex-registry checkout:
+
+```bash
+node scripts/add-listing.mjs <the release asset url> --tags your,tags
+# → writes apps/{id}/listing.json + rebuilds index.json; open a PR
+```
+
+Registry CI re-downloads the artifact and re-verifies the checksum. New
+version = new tag + a listing-bump PR — never swap the asset under an
+existing tag; the pinned digest is the trust anchor. (Manual flow, if you
+prefer: `npm run package`, `sha256sum`, `gh release create` — same fields.)
 
 ## The contract (read this before coding)
 
